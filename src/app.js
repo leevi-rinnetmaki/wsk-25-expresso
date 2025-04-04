@@ -1,24 +1,22 @@
 import express from 'express';
+import api from './api/index.js';
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 app.use('/public', express.static('public'));
 
 app.get('/', (req, res) => {
-  res.send('Welcome to my REST API!');
+  res.send('<h2>Welcome to my REST API!</h2>');
 });
 
-app.get('/api/v1/cat', (req, res) => {
-    const cat = {
-      cat_id: 246,
-      name: 'Kerttu-poika',
-      birthdate: '2006-11-05',
-      weight: 8,
-      owner: 'ile',
-      image: 'https://loremflickr.com/320/240/cat',
-    };
-  
-    res.json(cat);
-  });
+app.use('/api/v1', api);
+
+app.get('/test', (req, res, next) => {
+  req.url = '/cats'; // Modify the URL to match a route in the `api` router
+  api(req, res, next); // Pass the request to the `api` router
+});
 
 
 export default app;

@@ -1,5 +1,4 @@
 import sharp from "sharp";
-console.log('Sharp version:', sharp.version);
 
 const createThumbnail = async (req, res, next) => {
   try {

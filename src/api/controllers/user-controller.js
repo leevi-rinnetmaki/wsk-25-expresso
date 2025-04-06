@@ -14,7 +14,20 @@ const getUserById = (req, res) => {
 };
 
 const postUser = (req, res) => {
-  const result = addUser(req.body);
+  //const result = addUser(req.body);
+  const {originalname: user_name, destination: birthdate, filename, size: weight} = req.file;
+  const uusiUser = {
+    user_name,
+    birthdate,
+    filename,
+    weight,
+  };
+  const result = addUser(uusiUser);
+
+  console.log(1);
+  console.log(req.body);
+  console.log(req.file);
+  console.log(2);
   if (result.user_id) {
     res.status(201);
     res.json({message: 'New user added.', result});

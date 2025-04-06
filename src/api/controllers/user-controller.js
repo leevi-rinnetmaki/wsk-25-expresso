@@ -1,4 +1,6 @@
+import bcrypt from 'bcrypt';
 import {addUser, findUserById, listAllUsers} from "../models/user-model.js";
+import e from 'express';
 
 const getUser = (req, res) => {
   res.json(listAllUsers());
@@ -13,21 +15,17 @@ const getUserById = (req, res) => {
   }
 };
 
-const postUser = (req, res) => {
+const postUser = async (req, res) => {
   //const result = addUser(req.body);
-  const {originalname: user_name, destination: birthdate, filename, size: weight} = req.file;
-  const uusiUser = {
-    user_name,
-    birthdate,
-    filename,
-    weight,
+  req.body.password = bcrypt.hashSync(req.body.password, 10);
+  const newUser = {
+    name: req.body.name,
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password,
   };
-  const result = addUser(uusiUser);
+  const result = addUser(newUser);
 
-  console.log(1);
-  console.log(req.body);
-  console.log(req.file);
-  console.log(2);
   if (result.user_id) {
     res.status(201);
     res.json({message: 'New user added.', result});
